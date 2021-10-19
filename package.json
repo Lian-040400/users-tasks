@@ -1,0 +1,18 @@
+{
+  "name": "users-tasks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile:sass": "node-sass sass/main.scss css/style.css -w",
+    "compile:tsc":"tsc ./script/script.ts",
+    "execute:js":"node ./script/script.js",
+    "start":"npm run compile:tsc & npm run execute:js"
+  },
+  "author": "", 
+  "license": "ISC",
+  "devDependencies": {
+    "node-sass": "^6.0.1",
+    "typescript": "^4.4.4"
+  }
+}
