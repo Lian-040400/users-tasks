@@ -1,0 +1,12 @@
+@mixin user-card{
+    margin:10px;
+    width: 240px;
+    height: 260px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    display: flex;
+    align-items: center;
+     flex-direction: column;
+    justify-content: center;
+    border-radius: 4px;
+}

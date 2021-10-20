@@ -4,7 +4,7 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "compile:sass": "node-sass sass/main.scss css/style.css -w",
+    "compile:sass": "node-sass ./main.scss css/style.css -w",
     "compile:tsc":"tsc ./script/script.ts",
     "execute:js":"node ./script/script.js",
     "start":"npm run compile:tsc & npm run execute:js"
