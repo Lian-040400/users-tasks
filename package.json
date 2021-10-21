@@ -5,14 +5,17 @@
   "main": "script.js",
   "scripts": {
     "compile:sass": "node-sass ./main.scss css/style.css -w",
-    "compile:tsc":"tsc ./script/script.ts",
-    "execute:js":"node ./script/script.js",
-    "start":"npm run compile:tsc & npm run execute:js"
+    "compile:tsc": "tsc-watch",
+    "execute:js": "node ./compiled/script.js",
+    "start": "concurrently npm:compile:*"
   },
-  "author": "", 
+  "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^16.11.1",
+    "concurrently": "^6.3.0",
     "node-sass": "^6.0.1",
+    "tsc-watch": "^4.5.0",
     "typescript": "^4.4.4"
   }
 }

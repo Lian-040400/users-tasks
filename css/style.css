@@ -80,34 +80,92 @@ body {
   height: 100vh;
   width: 100%;
   padding-top: 200px;
+  visibility: hidden;
   transition: visibility 0s opacity 0.5s;
-  background: #1a2d58df; }
+  background: #1a2d58da; }
   .modal__container .modal {
-    background-color: #1A2D58;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     width: 400px;
-    text-align: center;
-    padding: 20px; }
+    padding: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    text-align: center; }
     .modal__container .modal h1 {
       margin: 10px 0;
       font-size: 20px;
       letter-spacing: 4px;
       margin: 10px 0; }
-    .modal__container .modal p {
-      font-size: 15px;
-      margin: 15px 0; }
+    .modal__container .modal .input-container {
+      width: 100%;
+      position: relative;
+      color: white; }
+      .modal__container .modal .input-container label {
+        position: absolute;
+        font-size: 1rem;
+        left: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.45);
+        padding: 0 0.3rem;
+        margin: 0 20px;
+        transition: 0.1s ease-out;
+        transform-origin: left top;
+        pointer-events: none;
+        background-color: #394877; }
+      .modal__container .modal .input-container input {
+        width: 90%;
+        margin: 20px;
+        margin-bottom: 0;
+        font-size: 1rem;
+        outline: none;
+        border: 1px solid #1991db80;
+        border-radius: 4px;
+        padding: 0.7rem 1rem;
+        color: white;
+        transition: 0.1s ease-out;
+        background: #1a2d5800; }
+        .modal__container .modal .input-container input:focus {
+          border-color: #1992db; }
+        .modal__container .modal .input-container input:focus + label {
+          color: #1992db;
+          top: 20px;
+          transform: translateY(-50%) scale(0.9);
+          background-color: #394877; }
+        .modal__container .modal .input-container input:not(:placeholder-shown) + label {
+          top: 20px;
+          transform: translateY(-50%) scale(0.9); }
+        .modal__container .modal .input-container input:hover + label {
+          color: #1992db;
+          top: 20px;
+          background-color: #394877;
+          transform: translateY(-50%) scale(0.9); }
+        .modal__container .modal .input-container input:hover {
+          border-color: #1992db; }
     .modal__container .modal .buttons {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
       font-size: 15px; }
-      .modal__container .modal .buttons .going {
-        width: 49.99999%;
-        float: left;
-        color: #fff;
-        padding: 8px 16px;
-        background-color: #4caf50; }
-        .modal__container .modal .buttons .going:hover {
-          background-color: #dadada;
-          color: #000;
+      .modal__container .modal .buttons .add {
+        background-color: #1992db;
+        width: 41%;
+        padding: 8px 17px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 5px; }
+        .modal__container .modal .buttons .add:hover {
+          opacity: 0.9;
+          cursor: pointer; }
+      .modal__container .modal .buttons .cancel {
+        margin-right: 30px;
+        background-color: #5f698e;
+        width: 41%;
+        padding: 8px 17px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 5px; }
+        .modal__container .modal .buttons .cancel:hover {
+          opacity: 0.9;
           cursor: pointer; }
   .modal__container.show {
     visibility: visible !important;
@@ -126,65 +184,6 @@ body {
   .going,
   .cant__come {
     width: 100% !important; } }
-
-.cant__come {
-  width: 49.99999%;
-  float: left;
-  color: #fff;
-  background-color: #f44336;
-  padding: 8px 16px; }
-  .cant__come:hover {
-    background-color: #dadada;
-    color: #000;
-    cursor: pointer; }
-
-.material-textfield {
-  position: relative;
-  color: white; }
-
-label {
-  position: absolute;
-  font-size: 1rem;
-  left: 80px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: gray;
-  padding: 0 0.3rem;
-  margin: 0 0.5rem;
-  transition: .1s ease-out;
-  transform-origin: left top;
-  pointer-events: none; }
-
-input {
-  font-size: 1rem;
-  outline: none;
-  border: 1px solid gray;
-  border-radius: 5px;
-  padding: 1rem 0.7rem;
-  color: gray;
-  transition: 0.1s ease-out;
-  background-color: #fff;
-  background: #1a2d58df; }
-
-input:focus {
-  border-color: #6200EE; }
-
-input:focus + label {
-  color: #6200EE;
-  top: 0;
-  transform: translateY(-50%) scale(0.9); }
-
-input:not(:placeholder-shown) + label {
-  top: 0;
-  transform: translateY(-50%) scale(0.9); }
-
-input:hover + label {
-  color: #6200EE;
-  top: 0;
-  transform: translateY(-50%) scale(0.9); }
-
-input:hover {
-  border-color: #6200EE; }
 
 .header {
   font-size: 36px;
