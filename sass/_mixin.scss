@@ -1,4 +1,4 @@
-@mixin user-card {
+@mixin card {
     margin: 10px;
     width: 240px;
     height: 260px;
@@ -15,6 +15,7 @@
     padding: 8px 17px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 5px;
+    transition: 0.3s;
 }
 @mixin confirm-button-hover {
     opacity: 0.9;

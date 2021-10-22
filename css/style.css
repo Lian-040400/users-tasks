@@ -46,27 +46,6 @@ body {
   padding: 0 10px;
   margin: 20px; }
 
-.add-task {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #fff;
-  padding: 20px;
-  margin-top: 30px; }
-  .add-task .header {
-    font-size: 30px;
-    font-weight: 600; }
-  .add-task button {
-    font-size: 28px;
-    cursor: pointer;
-    border-radius: 5px;
-    color: #fff;
-    background-color: #8E49E8;
-    border: none;
-    outline: none;
-    width: 60px;
-    height: 50px; }
-
 .modal__container {
   color: white;
   display: flex;
@@ -153,7 +132,8 @@ body {
         width: 41%;
         padding: 8px 17px;
         border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 5px; }
+        border-radius: 5px;
+        transition: 0.3s; }
         .modal__container .modal .buttons .add:hover {
           opacity: 0.9;
           cursor: pointer; }
@@ -163,7 +143,8 @@ body {
         width: 41%;
         padding: 8px 17px;
         border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 5px; }
+        border-radius: 5px;
+        transition: 0.3s; }
         .modal__container .modal .buttons .cancel:hover {
           opacity: 0.9;
           cursor: pointer; }
@@ -224,3 +205,43 @@ body {
     .users .add-users:hover {
       background-color: #1992DB;
       cursor: pointer; }
+
+.user-card {
+  margin: 10px;
+  width: 240px;
+  height: 260px;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 15px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.4); }
+  .user-card .user-data {
+    margin-top: 60px; }
+  .user-card:hover .card-buttons {
+    height: 40px; }
+  .user-card .card-buttons {
+    display: flex;
+    width: 100%;
+    height: 0;
+    transition: 0.5s; }
+    .user-card .card-buttons .edit {
+      width: 50%;
+      padding: 10px 0px;
+      background-color: #1992DB;
+      border-radius: 4px; }
+      .user-card .card-buttons .edit:hover {
+        cursor: pointer; }
+    .user-card .card-buttons .remove {
+      width: 50%;
+      padding: 10px 0px;
+      background-color: rgba(255, 255, 255, 0.2); }
+      .user-card .card-buttons .remove:hover {
+        cursor: pointer; }
