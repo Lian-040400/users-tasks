@@ -7,17 +7,43 @@ const dateEllement: HTMLElement | null = document.getElementById("date-input");
 const emailEllement: HTMLElement | null = document.getElementById("email-input");
 const nameEllement: HTMLElement | null = document.getElementById("name-input");
 const firstNameEllement: HTMLElement | null = document.getElementById("first-name-input");
-
+// const users = [];
 controlDate();
 addUsersElement?.addEventListener("click", openModal);
 cancel?.addEventListener("click", cancelModal);
 add?.addEventListener("click", addUser);
 
+function getDataFromDb() {
+    fetch('http://localhost:9000/users')
+        .then(response => response.json())
+        .then(users => {
+            users.forEach((user: Object) => {
+                creatUserCard(user);
+            });
+        })
+        .catch((error) => {
+            document.body.innerHTML = `<h1 style='color: red'>Somethins is wrong !!!</h1>`
+        })
+}
+getDataFromDb();
+
 function addUser() {
     const data = getDataFromForm();
-    creatUserCard(data);
-    cancelModal();
-    clearFormInformation();
+
+    fetch('http://localhost:9000/users', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then(response => response.json())
+        .then(data => {
+
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        })
 }
 function controlDate() {
     const today = new Date();
@@ -34,12 +60,13 @@ function getDataFromForm() {
         if (validateEmail(email)) {
             const dateNow = (new Date).getFullYear();
             date = dateNow - date;
-            return {
+            let data = {
                 name,
                 firstName,
                 email,
                 date
             };
+            return data;
         }
         else {
             alert("mast be email");
@@ -49,6 +76,7 @@ function getDataFromForm() {
         alert("All field are requared");
     }
 }
+
 function openModal() {
     modal?.classList.add("show");
 }
@@ -59,8 +87,31 @@ function validateEmail(email: String): Boolean {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
+
+function removeUserFromDB(userId: String) {
+    return fetch(`http://localhost:9000/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
+        },
+    })
+
+}
+function editUserFromDB(data: any) {
+
+    return fetch(`http://localhost:9000/users/${data.id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
+        },
+        body: JSON.stringify(
+            {
+                "likes": 5
+            }
+        )
+    })
+}
 function creatUserCard(data: any) {
-    
     const users = document.querySelector(".users");
     const user = document.createElement("div");
     const userdata = document.createElement("div");
@@ -73,6 +124,7 @@ function creatUserCard(data: any) {
     const email = document.createElement("p");
 
     user.classList.add("user-card");
+    user.id = "user-card-" + data.id;
     userdata.classList.add("user-data");
     cardButtons.classList.add("card-buttons");
     edit.classList.add("edit");
@@ -95,16 +147,34 @@ function creatUserCard(data: any) {
     user.appendChild(cardButtons);
     users?.appendChild(user);
 
-    // remove.addEventListener("click", cancelModal);
-    // edit.addEventListener("click", ()=>{
-    //     age.innerText = data.date;
-    // name.innerText = data.name;
-    // firstName.innerText = data.firstName;
-    // email.innerText = data.email;
-    // });
+    remove.addEventListener('click', () => {
+        removeUserFromDB(data.id)
+            .then(() => {
+                user.remove();
+            })
+            .then(res => console.log(res));
+    });
+    edit.addEventListener('click', () => {
+        openModal();
+        console.log();
+        
+        (<HTMLInputElement>nameEllement).value = data.name;
+        (<HTMLInputElement>firstNameEllement).value = data.firstName;
+        (<HTMLInputElement>emailEllement).value = data.email;
+        (<HTMLInputElement>dateEllement).value = data.date;
+
+        // (<HTMLInputElement>nameEllement).innerText = "ggggg";
+        // editUserFromDB(data);
+        // .then(() => {
+        //     user.remove();
+        // })
+        // .then(res => console.log(res));
+    });
+
 
 
 }
+
 function clearFormInformation() {
     (<HTMLInputElement>nameEllement).value = '';
     (<HTMLInputElement>emailEllement).value = '';
