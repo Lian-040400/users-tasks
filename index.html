@@ -29,31 +29,60 @@
         <div class="background-gradient-container">
         </div>
     </div>
-    <div class="modal__container">
+    <div class="modal__container" id="add-modal">
         <div class="modal">
             <h1>ADD USER</h1>
             <div class="input-container">
-                <input id="name-input" placeholder=" " type="text">
+                <input id="add-name-input" placeholder=" " type="text">
                 <label>Name</label>
             </div>
             <div class="input-container">
-                <input id="first-name-input" placeholder=" " type="text">
+                <input id="add-firstName-input" placeholder=" " type="text">
                 <label>FirstName</label>
             </div>
             <div class="input-container">
-                <input id="date-input" placeholder=" " type="date">
+                <input id="add-date-input" placeholder=" " type="date">
                 <label>Age</label>
             </div>
             <div class="input-container">
-                <input  id="email-input" placeholder=" " type="email">
+                <input  id="add-email-input" placeholder=" " type="email">
                 <label>Email</label>
             </div>
             <div class="buttons">
-                <div class="cancel">
+                <div class="cancel" id="add-modal-cancel">
                     Cancel
                 </div>
-                <div class="add">
+                <div class="add" id="add-modal-add">
                     Add
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal__container" id="edit-modal">
+        <div class="modal" >
+            <h1>Edit USER</h1>
+            <div class="input-container">
+                <input id="edit-name-input" placeholder=" " type="text">
+                <label>Name</label>
+            </div>
+            <div class="input-container">
+                <input id="edit-firstName-input" placeholder=" " type="text">
+                <label>FirstName</label>
+            </div>
+            <div class="input-container">
+                <input id="edit-date-input" placeholder=" " type="date">
+                <label>Age</label>
+            </div>
+            <div class="input-container">
+                <input  id="edit-email-input" placeholder=" " type="email">
+                <label>Email</label>
+            </div>
+            <div class="buttons">
+                <div class="cancel" id="edit-modal-cancel">
+                    Cancel
+                </div>
+                <div class="add" id="edit-modal-edit">
+                   Edit
                 </div>
             </div>
         </div>

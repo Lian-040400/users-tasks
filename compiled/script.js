@@ -1,17 +1,35 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var addUsersElement = document.querySelector('.add-users');
-var modal = document.querySelector('.modal__container');
-var cancel = document.querySelector('.cancel');
-var add = document.querySelector('.add');
-var dateEllement = document.getElementById("date-input");
-var emailEllement = document.getElementById("email-input");
-var nameEllement = document.getElementById("name-input");
-var firstNameEllement = document.getElementById("first-name-input");
-// const users = [];
+var addModal = document.querySelector('#add-modal');
+var editModal = document.querySelector('#edit-modal');
+var addModalCancel = document.querySelector('#add-modal-cancel');
+var addModalAdd = document.querySelector('#add-modal-add');
+var editModalCancel = document.querySelector('#edit-modal-cancel');
+var editModalAdd = document.querySelector('#edit-modal-edit');
+var addModalDate = document.getElementById("add-date-input");
+var addModalEmail = document.getElementById("add-email-input");
+var addModalName = document.getElementById("add-name-input");
+var addModalFirstName = document.getElementById("add-firstName-input");
+var editModalName = document.getElementById("edit-name-input");
+var editModalFirstName = document.getElementById("edit-firstName-input");
+var editModalDate = document.getElementById("edit-date-input");
+var editModalEmail = document.getElementById("edit-email-input");
 controlDate();
-addUsersElement === null || addUsersElement === void 0 ? void 0 : addUsersElement.addEventListener("click", openModal);
-cancel === null || cancel === void 0 ? void 0 : cancel.addEventListener("click", cancelModal);
-add === null || add === void 0 ? void 0 : add.addEventListener("click", addUser);
+addUsersElement === null || addUsersElement === void 0 ? void 0 : addUsersElement.addEventListener("click", function () { return openModal('add'); });
+addModalCancel === null || addModalCancel === void 0 ? void 0 : addModalCancel.addEventListener("click", function () { return cancelModal('add'); });
+addModalAdd === null || addModalAdd === void 0 ? void 0 : addModalAdd.addEventListener("click", addUser);
+editModalCancel === null || editModalCancel === void 0 ? void 0 : editModalCancel.addEventListener("click", function () { return cancelModal('edit'); });
 function getDataFromDb() {
     fetch('http://localhost:9000/users')
         .then(function (response) { return response.json(); })
@@ -26,7 +44,10 @@ function getDataFromDb() {
 }
 getDataFromDb();
 function addUser() {
-    var data = getDataFromForm();
+    if (!getDataFromForm('add')) {
+        return;
+    }
+    var data = getDataFromForm('add');
     fetch('http://localhost:9000/users', {
         method: 'POST',
         headers: {
@@ -44,18 +65,33 @@ function addUser() {
 function controlDate() {
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    dateEllement === null || dateEllement === void 0 ? void 0 : dateEllement.setAttribute("min", "1890-01-01");
-    dateEllement === null || dateEllement === void 0 ? void 0 : dateEllement.setAttribute("max", "" + date);
+    addModalDate === null || addModalDate === void 0 ? void 0 : addModalDate.setAttribute("min", "1890-01-01");
+    addModalDate === null || addModalDate === void 0 ? void 0 : addModalDate.setAttribute("max", "" + date);
 }
-function getDataFromForm() {
-    var name = nameEllement.value;
-    var firstName = firstNameEllement.value;
-    var email = emailEllement.value;
-    var date = parseFloat(dateEllement.value);
-    if ((name !== "") || (firstName !== "") || (email !== "") || (date !== NaN)) {
+function getDataFromForm(type) {
+    var name;
+    var firstName;
+    var email;
+    var date;
+    if (type === "add") {
+        name = addModalName.value;
+        firstName = addModalFirstName.value;
+        email = addModalEmail.value;
+        date = addModalDate.value;
+        return checker(name, firstName, email, date);
+    }
+    else if (type === "edit") {
+        name = editModalName.value;
+        firstName = editModalFirstName.value;
+        email = editModalEmail.value;
+        date = editModalDate.value;
+        console.log('555', checker(name, firstName, email, date));
+        return checker(name, firstName, email, date);
+    }
+}
+function checker(name, firstName, email, date) {
+    if ((name !== "") && (firstName !== "") && (email !== "") && (date !== "")) {
         if (validateEmail(email)) {
-            var dateNow = (new Date).getFullYear();
-            date = dateNow - date;
             var data = {
                 name: name,
                 firstName: firstName,
@@ -72,11 +108,21 @@ function getDataFromForm() {
         alert("All field are requared");
     }
 }
-function openModal() {
-    modal === null || modal === void 0 ? void 0 : modal.classList.add("show");
+function openModal(type) {
+    if (type === 'add') {
+        addModal === null || addModal === void 0 ? void 0 : addModal.classList.add("show");
+    }
+    else {
+        editModal === null || editModal === void 0 ? void 0 : editModal.classList.add("show");
+    }
 }
-function cancelModal() {
-    modal === null || modal === void 0 ? void 0 : modal.classList.remove("show");
+function cancelModal(type) {
+    if (type === "add") {
+        addModal === null || addModal === void 0 ? void 0 : addModal.classList.remove("show");
+    }
+    else {
+        editModal === null || editModal === void 0 ? void 0 : editModal.classList.remove("show");
+    }
 }
 function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -94,11 +140,10 @@ function editUserFromDB(data) {
     return fetch("http://localhost:9000/users/" + data.id, {
         method: 'PATCH',
         headers: {
-            'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            "likes": 5
-        })
+        body: JSON.stringify(__assign({}, data))
     });
 }
 function creatUserCard(data) {
@@ -118,7 +163,10 @@ function creatUserCard(data) {
     cardButtons.classList.add("card-buttons");
     edit.classList.add("edit");
     remove.classList.add("remove");
-    age.innerText = data.date;
+    var dateNow = (new Date).getFullYear();
+    var year = parseFloat(data.date);
+    var userAge = dateNow - year;
+    age.innerText = userAge.toString();
     name.innerText = data.name;
     firstName.innerText = data.firstName;
     email.innerText = data.email;
@@ -141,22 +189,21 @@ function creatUserCard(data) {
             .then(function (res) { return console.log(res); });
     });
     edit.addEventListener('click', function () {
-        openModal();
-        nameEllement.value = data.name;
-        firstNameEllement.value = data.firstName;
-        emailEllement.value = data.email;
-        dateEllement.value = data.date;
-        // (<HTMLInputElement>nameEllement).innerText = "ggggg";
-        // editUserFromDB(data);
-        // .then(() => {
-        //     user.remove();
-        // })
-        // .then(res => console.log(res));
+        openModal('edit');
+        editModalName.value = data.name;
+        editModalFirstName.value = data.firstName;
+        editModalEmail.value = data.email;
+        editModalDate.value = data.date;
+        var id = data.id;
+        editModalAdd === null || editModalAdd === void 0 ? void 0 : editModalAdd.addEventListener('click', function () {
+            var editData = __assign({ id: id }, getDataFromForm('edit'));
+            editUserFromDB(editData);
+        });
     });
 }
 function clearFormInformation() {
-    nameEllement.value = '';
-    emailEllement.value = '';
-    firstNameEllement.value = '';
-    dateEllement.value = '';
+    addModalName.value = '';
+    addModalEmail.value = '';
+    addModalFirstName.value = '';
+    addModalDate.value = '';
 }

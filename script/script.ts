@@ -1,17 +1,27 @@
 type DivElement = HTMLDivElement | null;
 const addUsersElement = document.querySelector('.add-users');
-const modal: DivElement = document.querySelector('.modal__container');
-const cancel: DivElement = document.querySelector('.cancel');
-const add: DivElement = document.querySelector('.add');
-const dateEllement: HTMLElement | null = document.getElementById("date-input");
-const emailEllement: HTMLElement | null = document.getElementById("email-input");
-const nameEllement: HTMLElement | null = document.getElementById("name-input");
-const firstNameEllement: HTMLElement | null = document.getElementById("first-name-input");
-// const users = [];
+const addModal: DivElement = document.querySelector('#add-modal');
+const editModal: DivElement = document.querySelector('#edit-modal');
+const addModalCancel: DivElement = document.querySelector('#add-modal-cancel');
+const addModalAdd: DivElement = document.querySelector('#add-modal-add');
+const editModalCancel: DivElement = document.querySelector('#edit-modal-cancel');
+const editModalAdd: DivElement = document.querySelector('#edit-modal-edit');
+const addModalDate: HTMLElement | null = document.getElementById("add-date-input");
+const addModalEmail: HTMLElement | null = document.getElementById("add-email-input");
+const addModalName: HTMLElement | null = document.getElementById("add-name-input");
+const addModalFirstName: HTMLElement | null = document.getElementById("add-firstName-input");
+
+
+const editModalName: HTMLElement | null = document.getElementById("edit-name-input");
+const editModalFirstName: HTMLElement | null = document.getElementById("edit-firstName-input");
+const editModalDate: HTMLElement | null = document.getElementById("edit-date-input");
+const editModalEmail: HTMLElement | null = document.getElementById("edit-email-input");
+
 controlDate();
-addUsersElement?.addEventListener("click", openModal);
-cancel?.addEventListener("click", cancelModal);
-add?.addEventListener("click", addUser);
+addUsersElement?.addEventListener("click", () => openModal('add'));
+addModalCancel?.addEventListener("click", () => cancelModal('add'));
+addModalAdd?.addEventListener("click", addUser);
+editModalCancel?.addEventListener("click", () => cancelModal('edit'));
 
 function getDataFromDb() {
     fetch('http://localhost:9000/users')
@@ -28,7 +38,12 @@ function getDataFromDb() {
 getDataFromDb();
 
 function addUser() {
-    const data = getDataFromForm();
+    if (!getDataFromForm('add')) {
+        return
+    }
+
+
+    const data = getDataFromForm('add');
 
     fetch('http://localhost:9000/users', {
         method: 'POST',
@@ -48,18 +63,34 @@ function addUser() {
 function controlDate() {
     const today = new Date();
     let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    dateEllement?.setAttribute("min", `1890-01-01`);
-    dateEllement?.setAttribute("max", `${date}`);
+    addModalDate?.setAttribute("min", `1890-01-01`);
+    addModalDate?.setAttribute("max", `${date}`);
 }
-function getDataFromForm() {
-    let name = (<HTMLInputElement>nameEllement).value;
-    let firstName = (<HTMLInputElement>firstNameEllement).value;
-    let email = (<HTMLInputElement>emailEllement).value;
-    let date = parseFloat((<HTMLInputElement>dateEllement).value);
-    if ((name !== "") || (firstName !== "") || (email !== "") || (date !== NaN)) {
+function getDataFromForm(type: String) {
+    let name: String;
+    let firstName: String;
+    let email: String;
+    let date: String;
+    if (type === "add") {
+        name = (<HTMLInputElement>addModalName).value;
+        firstName = (<HTMLInputElement>addModalFirstName).value;
+        email = (<HTMLInputElement>addModalEmail).value;
+        date = (<HTMLInputElement>addModalDate).value;
+        return checker(name, firstName, email, date);
+    }
+    else if (type === "edit") {
+        name = (<HTMLInputElement>editModalName).value;
+        firstName = (<HTMLInputElement>editModalFirstName).value;
+        email = (<HTMLInputElement>editModalEmail).value;
+        date = (<HTMLInputElement>editModalDate).value;
+        console.log('555', checker(name, firstName, email, date));
+
+        return checker(name, firstName, email, date);
+    }
+}
+function checker(name: String, firstName: String, email: String, date: String) {
+    if ((name !== "") && (firstName !== "") && (email !== "") && (date !== "")) {
         if (validateEmail(email)) {
-            const dateNow = (new Date).getFullYear();
-            date = dateNow - date;
             let data = {
                 name,
                 firstName,
@@ -72,16 +103,29 @@ function getDataFromForm() {
             alert("mast be email");
         }
     }
+
+
     else {
         alert("All field are requared");
     }
 }
+function openModal(type: String) {
+    if (type === 'add') {
+        addModal?.classList.add("show");
+    }
+    else {
+        editModal?.classList.add("show");
+    }
 
-function openModal() {
-    modal?.classList.add("show");
 }
-function cancelModal() {
-    modal?.classList.remove("show");
+function cancelModal(type: string) {
+    if (type === "add") {
+        addModal?.classList.remove("show");
+    }
+    else {
+        editModal?.classList.remove("show");
+    }
+
 }
 function validateEmail(email: String): Boolean {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -99,14 +143,16 @@ function removeUserFromDB(userId: String) {
 }
 function editUserFromDB(data: any) {
 
+
     return fetch(`http://localhost:9000/users/${data.id}`, {
         method: 'PATCH',
         headers: {
-            'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(
             {
-                "likes": 5
+                ...data
             }
         )
     })
@@ -129,8 +175,11 @@ function creatUserCard(data: any) {
     cardButtons.classList.add("card-buttons");
     edit.classList.add("edit");
     remove.classList.add("remove");
+    const dateNow = (new Date).getFullYear();
+    let year = parseFloat(data.date)
+    let userAge = dateNow - year;
 
-    age.innerText = data.date;
+    age.innerText = userAge.toString();
     name.innerText = data.name;
     firstName.innerText = data.firstName;
     email.innerText = data.email;
@@ -155,20 +204,21 @@ function creatUserCard(data: any) {
             .then(res => console.log(res));
     });
     edit.addEventListener('click', () => {
-        openModal();
-        console.log();
-        
-        (<HTMLInputElement>nameEllement).value = data.name;
-        (<HTMLInputElement>firstNameEllement).value = data.firstName;
-        (<HTMLInputElement>emailEllement).value = data.email;
-        (<HTMLInputElement>dateEllement).value = data.date;
+        openModal('edit');
+        (<HTMLInputElement>editModalName).value = data.name;
+        (<HTMLInputElement>editModalFirstName).value = data.firstName;
+        (<HTMLInputElement>editModalEmail).value = data.email;
+        (<HTMLInputElement>editModalDate).value = data.date;
+        let id = data.id
+        editModalAdd?.addEventListener('click', () => {
 
-        // (<HTMLInputElement>nameEllement).innerText = "ggggg";
-        // editUserFromDB(data);
-        // .then(() => {
-        //     user.remove();
-        // })
-        // .then(res => console.log(res));
+            let editData = {
+                id,
+                ...getDataFromForm('edit'),
+            }
+            editUserFromDB(editData);
+
+        });
     });
 
 
@@ -176,9 +226,9 @@ function creatUserCard(data: any) {
 }
 
 function clearFormInformation() {
-    (<HTMLInputElement>nameEllement).value = '';
-    (<HTMLInputElement>emailEllement).value = '';
-    (<HTMLInputElement>firstNameEllement).value = '';
-    (<HTMLInputElement>dateEllement).value = ''
+    (<HTMLInputElement>addModalName).value = '';
+    (<HTMLInputElement>addModalEmail).value = '';
+    (<HTMLInputElement>addModalFirstName).value = '';
+    (<HTMLInputElement>addModalDate).value = ''
 }
 

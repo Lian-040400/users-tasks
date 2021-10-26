@@ -6,8 +6,9 @@
   "scripts": {
     "compile:sass": "node-sass ./main.scss css/style.css -w",
     "compile:tsc": "tsc-watch",
+    "run:server": "npx json-server --watch db/db.json --port 9000",
     "execute:js": "node ./compiled/script.js",
-    "start": "concurrently npm:compile:*"
+    "start": "concurrently \"npm:compile:*\" \"npm:run:server\""
   },
   "author": "",
   "license": "ISC",
