@@ -29,7 +29,7 @@
             letter-spacing: 4px;
             margin: 10px 0;
         }
-        .input-container{
+        .input-container {
             width: 100%;
             position: relative;
             color: rgb(255, 255, 255);
@@ -89,15 +89,15 @@
             margin: 20px 0;
             font-size: 15px;
             .add {
-                               background-color: #1992db;
+                background-color: #1992db;
                 @include confirm-button;
                 &:hover {
                     @include confirm-button-hover;
                 }
             }
             .cancel {
-                 margin-right: 30px;
-                  background-color: rgb(95, 105, 142);
+                margin-right: 30px;
+                background-color: rgb(95, 105, 142);
 
                 @include confirm-button;
                 &:hover {
@@ -128,4 +128,3 @@
         width: 100% !important ;
     }
 }
-

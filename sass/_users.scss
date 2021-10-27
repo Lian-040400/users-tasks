@@ -11,10 +11,7 @@
     flex-wrap: wrap;
     overflow-y: auto;
     justify-content: flex-start;
-
-    // .user-card-container{}
     .add-users {
-      
         @include card;
         font-size: 22px;
         background-color: rgba(255, 255, 255, 0.102);
@@ -23,59 +20,67 @@
         .plus {
             font-size: 40px;
         }
-        &:hover{
-            background-color: #1992DB;
-            cursor:pointer;
+        &:hover {
+            background-color: #1992db;
+            cursor: pointer;
         }
     }
- 
-
 }
-.user-card{ 
-.user-data{
-    margin-top: 60px
-}
+.user-card {
     @include card;
     overflow: hidden;
     flex-direction: column;
     justify-content: space-between;
-    // font-weight: 100;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.15);
     font-size: 15px;
-   
-    border:none;
-    background-color: rgba(255, 255, 255, 0.4);
-
+    .user-data {
+        margin-top: 60px;
+        h2 {
+            font-size: 40px;
+        }
+        span {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+        a {
+            font-size: 14px;
+            display: block;
+            padding-top: 10px;
+        }
+    }
     &:hover {
         .card-buttons {
             height: 40px;
+            margin-top: 50px;
         }
     }
-
     .card-buttons {
         display: flex;
         width: 100%;
         height: 0;
         transition: 0.5s;
 
-    
-      
-
-    .edit{
-        width: 50%;
-         padding: 10px 0px;
-        background-color: #1992DB;
-        border-radius: 4px;
-        &:hover{
-            cursor: pointer;
+        .edit {
+            width: 50%;
+            padding: 10px 0px;
+            background-color: #1992db;
+            border-radius: 4px;
+            transition: 0.5s;
+            &:hover {
+                cursor: pointer;
+                background-color: #0782cf;
+            }
+        }
+        .remove {
+            width: 50%;
+            padding: 10px 0px;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: 0.5s;
+            &:hover {
+                cursor: pointer;
+                background-color: #d61515;
+            }
         }
     }
-    .remove{
-        width: 50%;
-        padding: 10px 0px;
-        background-color: rgba(255, 255, 255, 0.2);
-        &:hover{
-            cursor: pointer;
-        }
-    }
-}
 }

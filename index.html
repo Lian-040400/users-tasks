@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <title>users</title>
 </head>
+
 <body>
     <div class="page-container">
         <div class="list-container">
@@ -31,21 +33,22 @@
     </div>
     <div class="modal__container" id="add-modal">
         <div class="modal">
+            <form id='add-user-form'>
             <h1>ADD USER</h1>
             <div class="input-container">
-                <input id="add-name-input" placeholder=" " type="text">
+                <input id="add-name-input" placeholder=" " type="text" name="name">
                 <label>Name</label>
             </div>
             <div class="input-container">
-                <input id="add-firstName-input" placeholder=" " type="text">
+                <input id="add-firstName-input" placeholder=" " type="text" name="firstname">
                 <label>FirstName</label>
             </div>
             <div class="input-container">
-                <input id="add-date-input" placeholder=" " type="date">
+                <input id="add-date-input" placeholder=" " type="date" name="age">
                 <label>Age</label>
             </div>
             <div class="input-container">
-                <input  id="add-email-input" placeholder=" " type="email">
+                <input id="add-email-input" placeholder=" " type="email" name="email">
                 <label>Email</label>
             </div>
             <div class="buttons">
@@ -56,25 +59,27 @@
                     Add
                 </div>
             </div>
+        </form>
         </div>
     </div>
     <div class="modal__container" id="edit-modal">
-        <div class="modal" >
+        <div class="modal">
+            <form id='edit-user-form'>
             <h1>Edit USER</h1>
             <div class="input-container">
-                <input id="edit-name-input" placeholder=" " type="text">
+                <input id="edit-name-input" placeholder=" " type="text" name="name">
                 <label>Name</label>
             </div>
             <div class="input-container">
-                <input id="edit-firstName-input" placeholder=" " type="text">
+                <input id="edit-firstName-input" placeholder=" " type="text" name="firstname">
                 <label>FirstName</label>
             </div>
             <div class="input-container">
-                <input id="edit-date-input" placeholder=" " type="date">
+                <input id="edit-date-input" placeholder=" " type="date" name="age">
                 <label>Age</label>
             </div>
             <div class="input-container">
-                <input  id="edit-email-input" placeholder=" " type="email">
+                <input id="edit-email-input" placeholder=" " type="email" name="email">
                 <label>Email</label>
             </div>
             <div class="buttons">
@@ -82,9 +87,10 @@
                     Cancel
                 </div>
                 <div class="add" id="edit-modal-edit">
-                   Edit
+                    Edit
                 </div>
             </div>
+            </form>
         </div>
     </div>
     <script src="./compiled/script.js"></script>

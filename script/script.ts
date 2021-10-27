@@ -1,170 +1,81 @@
-type DivElement = HTMLDivElement | null;
-const addUsersElement = document.querySelector('.add-users');
-const addModal: DivElement = document.querySelector('#add-modal');
-const editModal: DivElement = document.querySelector('#edit-modal');
-const addModalCancel: DivElement = document.querySelector('#add-modal-cancel');
-const addModalAdd: DivElement = document.querySelector('#add-modal-add');
-const editModalCancel: DivElement = document.querySelector('#edit-modal-cancel');
-const editModalAdd: DivElement = document.querySelector('#edit-modal-edit');
-const addModalDate: HTMLElement | null = document.getElementById("add-date-input");
-const addModalEmail: HTMLElement | null = document.getElementById("add-email-input");
-const addModalName: HTMLElement | null = document.getElementById("add-name-input");
-const addModalFirstName: HTMLElement | null = document.getElementById("add-firstName-input");
+export interface IUser {
+    name: string
+    firstName: string
+    email: string
+    date: string
+    id?: number
+}
+import { dataChecker, controlDate, } from "../validation/validation";
+import { getUsers, removeUserFromDB, editUserFromDB, addUser } from "../httpRequests/services";
 
+const addModal: HTMLDivElement = <HTMLDivElement>document.querySelector('#add-modal');
+const editModal: HTMLDivElement = document.querySelector('#edit-modal') as HTMLDivElement;
+const editModalAdd: HTMLDivElement = document.querySelector('#edit-modal-edit') as HTMLDivElement;
+const addModalDate: HTMLInputElement = document.getElementById("add-date-input") as HTMLInputElement;
+const addModalEmail: HTMLInputElement =
 
-const editModalName: HTMLElement | null = document.getElementById("edit-name-input");
-const editModalFirstName: HTMLElement | null = document.getElementById("edit-firstName-input");
-const editModalDate: HTMLElement | null = document.getElementById("edit-date-input");
-const editModalEmail: HTMLElement | null = document.getElementById("edit-email-input");
+const editModalName: HTMLInputElement = document.getElementById("edit-name-input") as HTMLInputElement;
+const editModalFirstName: HTMLInputElement = document.getElementById("edit-firstName-input") as HTMLInputElement;
+const editModalDate: HTMLInputElement = document.getElementById("edit-date-input") as HTMLInputElement;
+const editModalEmail: HTMLInputElement = document.getElementById("edit-email-input") as HTMLInputElement;
+const addUserForm: HTMLFormElement = document.getElementById('add-user-form') as HTMLFormElement;
+const editUserForm: HTMLFormElement = document.getElementById('edit-user-form') as HTMLFormElement;
 
-controlDate();
-addUsersElement?.addEventListener("click", () => openModal('add'));
-addModalCancel?.addEventListener("click", () => cancelModal('add'));
-addModalAdd?.addEventListener("click", addUser);
-editModalCancel?.addEventListener("click", () => cancelModal('edit'));
+start();
 
-function getDataFromDb() {
-    fetch('http://localhost:9000/users')
-        .then(response => response.json())
+function start() {
+    const addUsersElement: HTMLDivElement = document.querySelector('.add-users') as HTMLDivElement;
+    const addModalCancel: HTMLDivElement = document.querySelector('#add-modal-cancel') as HTMLDivElement;
+    const addModalAdd: HTMLDivElement = document.querySelector('#add-modal-add') as HTMLDivElement;
+    const editModalCancel: HTMLDivElement = document.querySelector('#edit-modal-cancel') as HTMLDivElement;
+
+    getUsers()
         .then(users => {
-            users.forEach((user: Object) => {
-                creatUserCard(user);
+            users.forEach((user: IUser) => {
+                createUserCard(user);
             });
         })
-        .catch((error) => {
-            document.body.innerHTML = `<h1 style='color: red'>Somethins is wrong !!!</h1>`
-        })
+        .catch(() => {
+            document.body.innerHTML = `<h1 style='color: red'>Somethins is wrong !!!</h1>`;
+        });
+
+    controlDate(<HTMLInputElement>addModalDate);
+
+    addUsersElement.addEventListener("click", () => openModal('add'));
+    addModalCancel.addEventListener("click", () => cancelModal('add'));
+    addModalAdd.addEventListener("click", () => addUser(<IUser>getDataFromForm('add')));
+    editModalCancel.addEventListener("click", () => cancelModal('edit'));
 }
-getDataFromDb();
-
-function addUser() {
-    if (!getDataFromForm('add')) {
-        return
-    }
-
-
-    const data = getDataFromForm('add');
-
-    fetch('http://localhost:9000/users', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-        .then(response => response.json())
-        .then(data => {
-
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        })
-}
-function controlDate() {
-    const today = new Date();
-    let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    addModalDate?.setAttribute("min", `1890-01-01`);
-    addModalDate?.setAttribute("max", `${date}`);
-}
-function getDataFromForm(type: String) {
-    let name: String;
-    let firstName: String;
-    let email: String;
-    let date: String;
-    if (type === "add") {
-        name = (<HTMLInputElement>addModalName).value;
-        firstName = (<HTMLInputElement>addModalFirstName).value;
-        email = (<HTMLInputElement>addModalEmail).value;
-        date = (<HTMLInputElement>addModalDate).value;
-        return checker(name, firstName, email, date);
-    }
-    else if (type === "edit") {
-        name = (<HTMLInputElement>editModalName).value;
-        firstName = (<HTMLInputElement>editModalFirstName).value;
-        email = (<HTMLInputElement>editModalEmail).value;
-        date = (<HTMLInputElement>editModalDate).value;
-        console.log('555', checker(name, firstName, email, date));
-
-        return checker(name, firstName, email, date);
-    }
-}
-function checker(name: String, firstName: String, email: String, date: String) {
-    if ((name !== "") && (firstName !== "") && (email !== "") && (date !== "")) {
-        if (validateEmail(email)) {
-            let data = {
-                name,
-                firstName,
-                email,
-                date
-            };
-            return data;
-        }
-        else {
-            alert("mast be email");
-        }
-    }
-
-
-    else {
-        alert("All field are requared");
-    }
-}
-function openModal(type: String) {
-    if (type === 'add') {
-        addModal?.classList.add("show");
-    }
-    else {
-        editModal?.classList.add("show");
-    }
-
+function openModal(type: string) {
+    const modal = type === 'add' ? addModal : editModal;
+    modal.classList.add("show");
 }
 function cancelModal(type: string) {
-    if (type === "add") {
-        addModal?.classList.remove("show");
+    const modal = type === 'add' ? addModal : editModal;
+    modal.classList.remove("show");
+    addUserForm.reset();
+}
+
+function getDataFromForm(type: string) {
+    let data: IUser;
+    let currentForm: HTMLFormElement = type === "add" ? addUserForm : editUserForm as HTMLFormElement;
+    data = {
+        name: currentForm['name'].value,
+        firstName: currentForm['firstname'].value,
+        email: currentForm['email'].value,
+        date: currentForm['date'].value,
     }
-    else {
-        editModal?.classList.remove("show");
-    }
-
-}
-function validateEmail(email: String): Boolean {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
+    return dataChecker(data);
 }
 
-function removeUserFromDB(userId: String) {
-    return fetch(`http://localhost:9000/users/${userId}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
-        },
-    })
-
-}
-function editUserFromDB(data: any) {
-
-
-    return fetch(`http://localhost:9000/users/${data.id}`, {
-        method: 'PATCH',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-            {
-                ...data
-            }
-        )
-    })
-}
-function creatUserCard(data: any) {
-    const users = document.querySelector(".users");
+function createUserCard(data: IUser) {
+    const users: HTMLDivElement = document.querySelector(".users") as HTMLDivElement;
     const user = document.createElement("div");
     const userdata = document.createElement("div");
     const cardButtons = document.createElement("div");
     const edit = document.createElement("div");
     const remove = document.createElement("div");
-    const age = document.createElement("p");
+    const age = document.createElement("h2");
     const name = document.createElement("span");
     const firstName = document.createElement("span");
     const email = document.createElement("p");
@@ -194,41 +105,29 @@ function creatUserCard(data: any) {
     userdata.appendChild(email);
     user.appendChild(userdata);
     user.appendChild(cardButtons);
-    users?.appendChild(user);
+    users.appendChild(user);
 
-    remove.addEventListener('click', () => {
-        removeUserFromDB(data.id)
-            .then(() => {
-                user.remove();
-            })
-            .then(res => console.log(res));
-    });
-    edit.addEventListener('click', () => {
-        openModal('edit');
-        (<HTMLInputElement>editModalName).value = data.name;
-        (<HTMLInputElement>editModalFirstName).value = data.firstName;
-        (<HTMLInputElement>editModalEmail).value = data.email;
-        (<HTMLInputElement>editModalDate).value = data.date;
-        let id = data.id
-        editModalAdd?.addEventListener('click', () => {
-
-            let editData = {
-                id,
-                ...getDataFromForm('edit'),
-            }
-            editUserFromDB(editData);
-
-        });
-    });
-
-
-
+    remove.addEventListener('click', () => deleteUserCard(user, <number>data.id));
+    edit.addEventListener('click', () => editUserCard(<IUser>data));
 }
-
-function clearFormInformation() {
-    (<HTMLInputElement>addModalName).value = '';
-    (<HTMLInputElement>addModalEmail).value = '';
-    (<HTMLInputElement>addModalFirstName).value = '';
-    (<HTMLInputElement>addModalDate).value = ''
+function deleteUserCard(user: HTMLDivElement, id: number) {
+    removeUserFromDB(id)
+        .then(() => {
+            user.remove();
+        })
 }
-
+function editUserCard(data: IUser) {
+    openModal('edit');
+    (<HTMLInputElement>editModalName).value = data.name;
+    (<HTMLInputElement>editModalFirstName).value = data.firstName;
+    (<HTMLInputElement>editModalEmail).value = data.email;
+    (<HTMLInputElement>editModalDate).value = data.date;
+    let id = data.id
+    editModalAdd.addEventListener('click', () => {
+        let editData = {
+            id,
+            ...getDataFromForm('edit'),
+        }
+        editUserFromDB(<IUser>editData);
+    });
+}
