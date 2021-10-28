@@ -127,6 +127,8 @@ body {
       justify-content: center;
       margin: 20px 0;
       font-size: 15px; }
+      .modal__container .modal .buttons button {
+        color: white; }
       .modal__container .modal .buttons .add {
         background-color: #1992db;
         width: 41%;
@@ -237,6 +239,9 @@ body {
   .user-card:hover .card-buttons {
     height: 40px;
     margin-top: 50px; }
+    .user-card:hover .card-buttons button {
+      color: white;
+      border: none; }
   .user-card .card-buttons {
     display: flex;
     width: 100%;

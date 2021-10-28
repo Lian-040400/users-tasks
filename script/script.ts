@@ -5,19 +5,12 @@ export interface IUser {
     date: string
     id?: number
 }
-import { dataChecker, controlDate, } from "../validation/validation";
+import { dataChecker, controlDate } from "../validation/validation";
 import { getUsers, removeUserFromDB, editUserFromDB, addUser } from "../httpRequests/services";
 
 const addModal: HTMLDivElement = <HTMLDivElement>document.querySelector('#add-modal');
 const editModal: HTMLDivElement = document.querySelector('#edit-modal') as HTMLDivElement;
 const editModalAdd: HTMLDivElement = document.querySelector('#edit-modal-edit') as HTMLDivElement;
-const addModalDate: HTMLInputElement = document.getElementById("add-date-input") as HTMLInputElement;
-const addModalEmail: HTMLInputElement =
-
-const editModalName: HTMLInputElement = document.getElementById("edit-name-input") as HTMLInputElement;
-const editModalFirstName: HTMLInputElement = document.getElementById("edit-firstName-input") as HTMLInputElement;
-const editModalDate: HTMLInputElement = document.getElementById("edit-date-input") as HTMLInputElement;
-const editModalEmail: HTMLInputElement = document.getElementById("edit-email-input") as HTMLInputElement;
 const addUserForm: HTMLFormElement = document.getElementById('add-user-form') as HTMLFormElement;
 const editUserForm: HTMLFormElement = document.getElementById('edit-user-form') as HTMLFormElement;
 
@@ -39,7 +32,7 @@ function start() {
             document.body.innerHTML = `<h1 style='color: red'>Somethins is wrong !!!</h1>`;
         });
 
-    controlDate(<HTMLInputElement>addModalDate);
+    controlDate(addUserForm['date']);
 
     addUsersElement.addEventListener("click", () => openModal('add'));
     addModalCancel.addEventListener("click", () => cancelModal('add'));
@@ -59,22 +52,26 @@ function cancelModal(type: string) {
 function getDataFromForm(type: string) {
     let data: IUser;
     let currentForm: HTMLFormElement = type === "add" ? addUserForm : editUserForm as HTMLFormElement;
-    data = {
-        name: currentForm['name'].value,
+    data = {       
+        name:currentForm["userName"].value,
         firstName: currentForm['firstname'].value,
         email: currentForm['email'].value,
         date: currentForm['date'].value,
     }
-    return dataChecker(data);
+    return dataChecker(data)
 }
 
+
 function createUserCard(data: IUser) {
+
     const users: HTMLDivElement = document.querySelector(".users") as HTMLDivElement;
     const user = document.createElement("div");
     const userdata = document.createElement("div");
     const cardButtons = document.createElement("div");
-    const edit = document.createElement("div");
-    const remove = document.createElement("div");
+    const edit = document.createElement("button");
+    const remove = document.createElement("button");
+    debugger
+
     const age = document.createElement("h2");
     const name = document.createElement("span");
     const firstName = document.createElement("span");
@@ -94,8 +91,8 @@ function createUserCard(data: IUser) {
     name.innerText = data.name;
     firstName.innerText = data.firstName;
     email.innerText = data.email;
-    remove.innerText = 'Delete';
-    edit.innerText = 'Edit';
+    remove.innerText += 'Delete';
+    edit.innerText += 'Edit';
 
     cardButtons.appendChild(remove);
     cardButtons.appendChild(edit);
@@ -118,10 +115,11 @@ function deleteUserCard(user: HTMLDivElement, id: number) {
 }
 function editUserCard(data: IUser) {
     openModal('edit');
-    (<HTMLInputElement>editModalName).value = data.name;
-    (<HTMLInputElement>editModalFirstName).value = data.firstName;
-    (<HTMLInputElement>editModalEmail).value = data.email;
-    (<HTMLInputElement>editModalDate).value = data.date;
+    
+    editUserForm['userName'].value = data.name;
+    editUserForm['firstname'].value = data.firstName;
+    editUserForm['email'].value = data.email;
+    editUserForm['date'].value = data.date;
     let id = data.id
     editModalAdd.addEventListener('click', () => {
         let editData = {

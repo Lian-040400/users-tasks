@@ -9,7 +9,7 @@ export function dataChecker(data: IUser) {
         }
     }
     else {
-        alert("All field are requaired!!!!");
+        alert("All field are requaired!!!!");  
     }
 }
 export function controlDate(addModalDate:HTMLInputElement ) {

@@ -88,6 +88,9 @@
             justify-content: center;
             margin: 20px 0;
             font-size: 15px;
+            button{
+                color: rgb(255, 255, 255);
+            }
             .add {
                 background-color: #1992db;
                 @include confirm-button;
