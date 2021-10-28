@@ -154,6 +154,9 @@ body {
     visibility: visible !important;
     opacity: 1 !important; }
 
+.show-necessary-ellement {
+  display: none; }
+
 @media (max-width: 768px) {
   .modal {
     width: 500px !important; } }

@@ -6,20 +6,16 @@
     "baseUrl": "./",    
     "rootDir": "./",      
     "outDir": "./dist",
-    "sourceMap": true,
     "declaration": false,
-    "target": "esnext",
-    "module": "esNext",
-    "esModuleInterop": true,
+    "target": "es2015",
+    "module": "es2020",
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
       "es2018",
-      "esnext",
       "dom"
     ]
   },

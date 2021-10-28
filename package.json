@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "script.js",
-  
   "scripts": {
     "compile:sass": "node-sass ./main.scss css/style.css -w",
     "compile:tsc": "tsc-watch",
@@ -17,6 +16,7 @@
     "@types/node": "^16.11.1",
     "concurrently": "^6.3.0",
     "node-sass": "^6.0.1",
+    "ts-node": "^10.4.0",
     "tsc-watch": "^4.5.0",
     "typescript": "^4.4.4"
   },

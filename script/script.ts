@@ -5,22 +5,18 @@ export interface IUser {
     date: string
     id?: number
 }
-import { dataChecker, controlDate } from "../validation/validation";
-import { getUsers, removeUserFromDB, editUserFromDB, addUser } from "../httpRequests/services";
-
-const addModal: HTMLDivElement = <HTMLDivElement>document.querySelector('#add-modal');
-const editModal: HTMLDivElement = document.querySelector('#edit-modal') as HTMLDivElement;
-const editModalAdd: HTMLDivElement = document.querySelector('#edit-modal-edit') as HTMLDivElement;
-const addUserForm: HTMLFormElement = document.getElementById('add-user-form') as HTMLFormElement;
-const editUserForm: HTMLFormElement = document.getElementById('edit-user-form') as HTMLFormElement;
+import { dataChecker, controlDate } from "../validation/validation.js";
+import { getUsers, removeUserFromDB, editUserFromDB, addUser } from "../httpRequests/services.js";
+const modal: HTMLDivElement = <HTMLDivElement>document.querySelector('.modal__container');
+const modalAdd: HTMLDivElement = document.querySelector('.add') as HTMLDivElement;
+const modalEdit: HTMLDivElement = document.querySelector('#edit') as HTMLDivElement;
+const userForm: HTMLFormElement = document.getElementById('add-user-form') as HTMLFormElement;
 
 start();
 
 function start() {
     const addUsersElement: HTMLDivElement = document.querySelector('.add-users') as HTMLDivElement;
     const addModalCancel: HTMLDivElement = document.querySelector('#add-modal-cancel') as HTMLDivElement;
-    const addModalAdd: HTMLDivElement = document.querySelector('#add-modal-add') as HTMLDivElement;
-    const editModalCancel: HTMLDivElement = document.querySelector('#edit-modal-cancel') as HTMLDivElement;
 
     getUsers()
         .then(users => {
@@ -31,47 +27,46 @@ function start() {
         .catch(() => {
             document.body.innerHTML = `<h1 style='color: red'>Somethins is wrong !!!</h1>`;
         });
-
-    controlDate(addUserForm['date']);
-
+    controlDate(userForm['date']);
     addUsersElement.addEventListener("click", () => openModal('add'));
-    addModalCancel.addEventListener("click", () => cancelModal('add'));
-    addModalAdd.addEventListener("click", () => addUser(<IUser>getDataFromForm('add')));
-    editModalCancel.addEventListener("click", () => cancelModal('edit'));
+    addModalCancel.addEventListener("click", () => cancelModal());
+    modalAdd.addEventListener("click", () => addUser(<IUser>getDataFromForm('add')));
 }
 function openModal(type: string) {
-    const modal = type === 'add' ? addModal : editModal;
+    let header;
+    let button;
+    if (type === 'add') {
+        header = document.querySelector(".add-modal-header");
+        button = modalAdd;
+        userForm.reset();
+    }
+    else if (type === 'edit') {
+        header = document.querySelector(".edit-modal-header");
+        button = modalEdit;
+    }
+    button.classList.remove("show-necessary-ellement");
+    header.classList.remove("show-necessary-ellement");
     modal.classList.add("show");
 }
-function cancelModal(type: string) {
-    const modal = type === 'add' ? addModal : editModal;
+function cancelModal() {
     modal.classList.remove("show");
-    addUserForm.reset();
+    userForm.reset();
 }
-
 function getDataFromForm(type: string) {
-    let data: IUser;
-    let currentForm: HTMLFormElement = type === "add" ? addUserForm : editUserForm as HTMLFormElement;
-    data = {       
-        name:currentForm["userName"].value,
-        firstName: currentForm['firstname'].value,
-        email: currentForm['email'].value,
-        date: currentForm['date'].value,
-    }
-    return dataChecker(data)
+    return dataChecker({
+        name: userForm["userName"].value,
+        firstName: userForm['firstname'].value,
+        email: userForm['email'].value,
+        date: userForm['date'].value,
+    })
 }
-
-
 function createUserCard(data: IUser) {
-
     const users: HTMLDivElement = document.querySelector(".users") as HTMLDivElement;
     const user = document.createElement("div");
     const userdata = document.createElement("div");
     const cardButtons = document.createElement("div");
     const edit = document.createElement("button");
     const remove = document.createElement("button");
-    debugger
-
     const age = document.createElement("h2");
     const name = document.createElement("span");
     const firstName = document.createElement("span");
@@ -103,10 +98,11 @@ function createUserCard(data: IUser) {
     user.appendChild(userdata);
     user.appendChild(cardButtons);
     users.appendChild(user);
-
+    userForm.reset();
     remove.addEventListener('click', () => deleteUserCard(user, <number>data.id));
     edit.addEventListener('click', () => editUserCard(<IUser>data));
 }
+
 function deleteUserCard(user: HTMLDivElement, id: number) {
     removeUserFromDB(id)
         .then(() => {
@@ -115,17 +111,18 @@ function deleteUserCard(user: HTMLDivElement, id: number) {
 }
 function editUserCard(data: IUser) {
     openModal('edit');
-    
-    editUserForm['userName'].value = data.name;
-    editUserForm['firstname'].value = data.firstName;
-    editUserForm['email'].value = data.email;
-    editUserForm['date'].value = data.date;
+    userForm['userName'].value = data.name;
+    userForm['firstname'].value = data.firstName;
+    userForm['email'].value = data.email;
+    userForm['date'].value = data.date;
     let id = data.id
-    editModalAdd.addEventListener('click', () => {
+    modalEdit.addEventListener('click', () => {
         let editData = {
             id,
             ...getDataFromForm('edit'),
         }
+        console.log(editData);
+        
         editUserFromDB(<IUser>editData);
     });
 }

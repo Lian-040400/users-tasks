@@ -1,4 +1,4 @@
-import { IUser } from "../script/script";
+import { IUser } from "../script/script.js";
 export { getUsers, removeUserFromDB, editUserFromDB };
 
 function getUsers() {

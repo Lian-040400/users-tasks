@@ -26,77 +26,48 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
     <div class="background-container">
         <div class="background-gradient-container">
         </div>
     </div>
-    <div class="modal__container" id="add-modal">
+    <div class="modal__container">
         <div class="modal">
             <form id='add-user-form'>
-            <h1>ADD USER</h1>
-            <div class="input-container">
-                <input id="add-name-input" placeholder=" " type="text" name="userName">
-                <label>Name</label>
-            </div>
-            <div class="input-container">
-                <input id="add-firstName-input" placeholder=" " type="text" name="firstname">
-                <label>FirstName</label>
-            </div>
-            <div class="input-container">
-                <input id="add-date-input" placeholder=" " type="date" name="age">
-                <label>Age</label>
-            </div>
-            <div class="input-container">
-                <input id="add-email-input" placeholder=" " type="email" name="email">
-                <label>Email</label>
-            </div>
-            <div class="buttons">
-                <button class="cancel" id="add-modal-cancel">
-                    Cancel
-                </button>
-                <button class="add" id="add-modal-add">
-                    Add
-                </button>
-            </div>
-        </form>
-        </div>
-    </div>
-    <div class="modal__container" id="edit-modal">
-        <div class="modal">
-            <form id='edit-user-form'>
-            <h1>Edit USER</h1>
-            <div class="input-container">
-                <input id="edit-name-input" placeholder=" " type="text" name="userName">
-                <label>Name</label>
-            </div>
-            <div class="input-container">
-                <input id="edit-firstName-input" placeholder=" " type="text" name="firstname">
-                <label>FirstName</label>
-            </div>
-            <div class="input-container">
-                <input id="edit-date-input" placeholder=" " type="date" name="age">
-                <label>Age</label>
-            </div>
-            <div class="input-container">
-                <input id="edit-email-input" placeholder=" " type="email" name="email">
-                <label>Email</label>
-            </div>
-            <div class="buttons">
-                <button class="cancel" id="edit-modal-cancel">
-                    Cancel
-                </button>
-                <button class="add" id="edit-modal-edit">
-                    Edit
-                </button>
-            </div>
+                <h1 class="add-modal-header show-necessary-ellement">ADD USER</h1>
+                <h1 class="edit-modal-header show-necessary-ellement">Edit USER</h1>
+                <div class="input-container">
+                    <input id="add-name-input" placeholder=" " type="text" name="userName">
+                    <label>Name</label>
+                </div>
+                <div class="input-container">
+                    <input id="add-firstName-input" placeholder=" " type="text" name="firstname">
+                    <label>FirstName</label>
+                </div>
+                <div class="input-container">
+                    <input id="add-date-input" placeholder=" " type="date" name="date">
+                    <label>Age</label>
+                </div>
+                <div class="input-container">
+                    <input id="add-email-input" placeholder=" " type="email" name="email">
+                    <label>Email</label>
+                </div>
+                <div class="buttons">
+                    <button class="cancel" id="add-modal-cancel">
+                        Cancel
+                    </button>
+                    <button class="add show-necessary-ellement">
+                        Add
+                    </button>
+                    <button class="add show-necessary-ellement" id="edit">
+                        Edit
+                    </button>
+                </div>
             </form>
         </div>
     </div>
-    <script>var exports = {"__esModule": true};</script>
-
-    <script src="./dist/script/script.js" type="text/javascript"></script>
+    <script src="./dist/script/script.js" type="module"></script>
 </body>
 
 </html>

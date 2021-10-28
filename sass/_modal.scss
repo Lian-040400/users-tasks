@@ -28,7 +28,9 @@
             font-size: 20px;
             letter-spacing: 4px;
             margin: 10px 0;
+        
         }
+       
         .input-container {
             width: 100%;
             position: relative;
@@ -109,11 +111,15 @@
             }
         }
     }
+   
     &.show {
         visibility: visible !important;
         opacity: 1 !important;
     }
-}
+} 
+.show-necessary-ellement{
+        display: none;
+    }
 @media (max-width: 768px) {
     .modal {
         width: 500px !important;
